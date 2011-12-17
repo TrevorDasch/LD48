@@ -16,3 +16,6 @@ Started working with lua and love. Love is pretty simple and easy to use, which 
 
 [Sat 1:07 AM]
 Started working on my enemy object. Right now I'm setting it up so that there will be 10 different enemy types. I might change this later. I should also work on a firing mechanic with a global bullet manager to handle all projectiles fired by anyone. Perhaps tomorrow morning.
+
+[Sat 2:26 AM]
+Decided that I wanted to work on particles, so I created a booster pixel spray from my rocket. It looks pretty awesome. It took me a while to figure out how to do it, but I'm glad I did. Done for today, more to come tomorrow morning.

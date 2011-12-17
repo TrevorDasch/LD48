@@ -12,7 +12,7 @@ end
 
 enemy.mt.__index = enemy.prototype
 
-function enemy.prototype:update()
+function enemy.prototype:update(dt)
 	
 end
 
