@@ -48,6 +48,29 @@ player.move = function(v,h,x,y)
 end
 
 player.update = function(dt)
+
+	local v = 0
+	local h = 0
+	if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
+		v = v - dt
+	end
+	if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
+		v = v + dt
+	end
+	if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
+		h = h + dt
+	end
+	if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
+		h = h - dt
+	end
+	
+	local x = love.mouse.getX()
+	local y = love.mouse.getY()
+	
+	
+	player.move(v,h,x,y)
+
+
 	local r = math.atan2(player.lookY-player.posY,player.lookX-player.posX) + math.pi /2
 
 	player.engine:setPosition(player.posX, player.posY)

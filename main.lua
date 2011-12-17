@@ -1,30 +1,58 @@
 require "player"
+require "enemies"
+
+background = {}
+background.posX = 0
+background.posY = 0
+
+function background.update(dt)
+	background.posX = background.posX - 100 * dt
+	if background.posX < -800 then
+		background.posX = background.posX+800
+	end
+end
+
+function background.draw()
+	love.graphics.draw(background.image,background.posX,background.posY)
+	love.graphics.draw(background.image,background.posX+800,background.posY)
+end
+
+function background.create()
+	background.image:renderTo(
+		function()
+			for i = 1,300 do
+				love.graphics.draw(pixel, math.random()* 800, math.random()*600)
+			end
+		end)
+	background.image:setWrap("repeat","repeat")
+end
 
 
 function love.load()
 	pixel = love.graphics.newImage("pixel.png")
 
 	player.image = love.graphics.newImage("player.png")
+	player.picker = love.graphics.newImage("player-picker.png")
 	player.createEngine(pixel)
 	
-	--for i = 1,10 do
-	--	enemies[i].image = love.graphics.newImage("enemy-"+i+".png")
-	--end
+	for i = 1,5 do
+		enemies[i].image = love.graphics.newImage("enemy" .. i .. ".png")
+		enemies[i].picker = love.graphics.newImage("enemy" .. i .. "-picker.png")
+		enemies[i]:createEngine(pixel)
+	end
+	
+	background.image = love.graphics.newFramebuffer()
+	background.create()
+		
+		
 end
 
 
 function love.draw()
-	if player.firing then
-		love.graphics.print("firing", 400,300)
-	else
-		love.graphics.print("not firing", 400,300)
-	end
-	if player.moving then
-		love.graphics.print("moving", 200,300)
-	else
-		love.graphics.print("not moving", 200,300)
-	end
 
+
+	background.draw()
+	
 	player.draw()
 end
 
@@ -41,26 +69,10 @@ function love.mousereleased(x, y, button)
 end
 
 function love.update(dt)
-	local v = 0
-	local h = 0
-	if love.keyboard.isDown("up") or love.keyboard.isDown("w") then
-		v = v - dt
-	end
-	if love.keyboard.isDown("down") or love.keyboard.isDown("s") then
-		v = v + dt
-	end
-	if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
-		h = h + dt
-	end
-	if love.keyboard.isDown("left") or love.keyboard.isDown("a") then
-		h = h - dt
-	end
 	
-	local x = love.mouse.getX()
-	local y = love.mouse.getY()
-	
-	player.move(v,h,x,y)
+	background.update(dt)
 	player.update(dt)
+	
 	
 end
 	

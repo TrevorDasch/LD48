@@ -19,3 +19,9 @@ Started working on my enemy object. Right now I'm setting it up so that there wi
 
 [Sat 2:26 AM]
 Decided that I wanted to work on particles, so I created a booster pixel spray from my rocket. It looks pretty awesome. It took me a while to figure out how to do it, but I'm glad I did. Done for today, more to come tomorrow morning.
+
+[Sat 2:56 PM]
+Spent the morning drawing all of my images. Also looked into the love framebuffer, which I think I'm going to use for my bullet hit detection.
+
+[Sat 3:43 PM]
+Created a framebuffer to act as the background image. Got it to scroll across the screen. 
