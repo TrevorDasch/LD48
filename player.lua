@@ -18,6 +18,20 @@ player.health = 100
 player.move = function(v,h,x,y)
 	player.posX= player.posX+200*h
 	player.posY= player.posY+200*v
+	
+	if player.posX < 0 then
+		player.posX = 0
+	end
+	if player.posY < 0 then
+		player.posY = 0
+	end
+	if player.posX > 800 then
+		player.posX = 800
+	end
+	if player.posY > 600 then
+		player.posY = 600
+	end
+	
 	player.lookX= x
 	player.lookY= y
 	if h ~= 0 or v ~= 0 then  
