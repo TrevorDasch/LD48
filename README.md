@@ -14,3 +14,5 @@ My Fedora box is being a jerk, so I'm going home to work on ubuntu. Also, hello 
 [Sat 12:06 AM]
 Started working with lua and love. Love is pretty simple and easy to use, which is awesome. Lua isn't so much different from javascript really, except objects don't appear to be native, though its not to difficult to implement apparently. Right now I've got a ship moving around, and swinging around to face the mouse. Need to fix the transparency on the image.
 
+[Sat 1:07 AM]
+Started working on my enemy object. Right now I'm setting it up so that there will be 10 different enemy types. I might change this later. I should also work on a firing mechanic with a global bullet manager to handle all projectiles fired by anyone. Perhaps tomorrow morning.
