@@ -387,12 +387,12 @@ function love.keypressed(key)
 	if mainMenu and key=="return" then
 		mainMenu = false
 	end
-	if key == "escape" then
+	if key == "escape" and not mainMenu then
 		paused = not paused
 		if paused then
-			love.audio:pause()
+			love.audio.pause()
 		else
-			love.audio:resume()
+			love.audio.resume()
 		end
 		
 	end
