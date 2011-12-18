@@ -180,7 +180,7 @@ function player:damage(dam)
 	self.health = self.health - dam
 	if self.health <= 0 then
 		self.destroyed = true
-		
+		gameOver = true
 		love.graphics.setFont(60)
 		self.explosion:start()
 	end

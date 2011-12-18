@@ -40,3 +40,6 @@ The game has a title screen and a pause screen. Save games work, so now if you q
 
 [Sun 11:25 AM]
 I'm switching to windows temporarily to use ModPlug Tracker, because I am familiar with it.
+
+[Sun 12:59 PM]
+The music has been created and added to the game. I have compressed the game. I'm going to get people to try it before I submit.

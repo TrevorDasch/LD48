@@ -5,6 +5,7 @@ gameLoaded = false
 
 paused = false
 mainMenu = true
+gameOver = false
 
 score = 0;
 
@@ -61,7 +62,7 @@ end
 
 function saveGame()
 	local data
-	if player.health>0 then
+	if not gameOver then
 		data = "return { score=" .. score ..", health=" .. player.health 
 					.. ", gameTime=" .. math.floor(gameTime) .. "}"
 	else
@@ -246,6 +247,9 @@ end
 
 function love.load()
 	pixel = love.graphics.newImage("pixel.png")
+	music = love.audio.newSource("GameMusic01.ogg")
+	music:setLooping(true)
+	love.audio.play(music)
 
 	player.image = love.graphics.newImage("player.png")
 	player.picker = love.graphics.newImage("player-picker.png")
@@ -302,11 +306,12 @@ function love.draw()
 	enemyList:draw()
 	player.draw()
 	
-	if player.health>0 then
+	if not gameOver then
 		love.graphics.print("SCORE: " .. score,10,10)
 		love.graphics.print("HEALTH: " .. player.health,10,40)
 	else
-		love.graphics.print("GAME OVER",200,250)
+		love.graphics.print("GAME OVER",200,240)
+		love.graphics.print("FINAL SCORE: " .. score,100,310)
 		return
 	end
 	if paused then
@@ -342,22 +347,30 @@ function love.update(dt)
 
 	gameTime= gameTime+dt
 	
-	
-	if table.getn(enemySaveData)>0 then
-		if math.floor(gameTime) >= enemySaveData[1].tstamp then
-			local obj = enemySaveData[1]
-			local proto = {}
-			for k,v in pairs(obj) do
-				if k~="proto" then
-					proto[k] = v
+	if not gameOver then
+		if table.getn(enemySaveData)>0 then
+			if math.floor(gameTime) >= enemySaveData[1].tstamp then
+				local obj = enemySaveData[1]
+				local proto = {}
+				for k,v in pairs(obj) do
+					if k~="proto" then
+						proto[k] = v
+					end
 				end
+				obj.proto = proto
+				enemyList:addEnemy(obj)
+				table.remove(enemySaveData,1)
 			end
-			obj.proto = proto
-			enemyList:addEnemy(obj)
-			table.remove(enemySaveData,1)
+		else
+			if table.getn(enemyList[1])==0 and
+			   table.getn(enemyList[2])==0 and
+			   table.getn(enemyList[3])==0 and
+			   table.getn(enemyList[4])==0 and
+			   table.getn(enemyList[5])==0 then
+				gameOver=true
+			end
 		end
 	end
-	
 	background.update(dt)
 	player.update(dt)
 	enemyList:update(dt)
@@ -376,6 +389,12 @@ function love.keypressed(key)
 	end
 	if key == "escape" then
 		paused = not paused
+		if paused then
+			love.audio:pause()
+		else
+			love.audio:resume()
+		end
+		
 	end
 end
 
