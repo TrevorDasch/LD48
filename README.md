@@ -37,3 +37,6 @@ The game is completely playable. I'm going to call it a night for LD48. Tomorrow
 
 [Sun 10:57 AM]
 The game has a title screen and a pause screen. Save games work, so now if you quit you restart in the same place. Starting music work now.
+
+[Sun 11:25 AM]
+I'm switching to windows temporarily to use ModPlug Tracker, because I am familiar with it.
