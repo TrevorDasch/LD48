@@ -1,3 +1,6 @@
+require "bullets"
+
+
 player = {}
 	
 player.posX = 300
@@ -11,8 +14,8 @@ player.moving = false
 
 player.health = 100
 
-
-
+player.cooldown = 1
+player.lastshot = 1
 
 
 player.move = function(v,h,x,y)
@@ -70,13 +73,22 @@ player.update = function(dt)
 	
 	player.move(v,h,x,y)
 
-
 	local r = math.atan2(player.lookY-player.posY,player.lookX-player.posX) + math.pi /2
+
+
+	player.lastshot=player.lastshot + dt
+	if player.firing and player.lastshot > player.cooldown then
+		player.lastshot = 0
+		playerBulletList:addBullet(player.posX,player.posY,r-math.pi/2)
+	end
+
 
 	player.engine:setPosition(player.posX, player.posY)
 	player.engine:setRotation(r)
 	player.engine:setDirection(r+math.pi/2)	
 	player.engine:update(dt)
+	
+	
 end
 
 

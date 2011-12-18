@@ -25,3 +25,6 @@ Spent the morning drawing all of my images. Also looked into the love framebuffe
 
 [Sat 3:43 PM]
 Created a framebuffer to act as the background image. Got it to scroll across the screen. 
+
+[Sat 6:12 PM]
+Wrote all the code for bullet creation, hit detection, and everything. Now I just need to do Enemy scripting.

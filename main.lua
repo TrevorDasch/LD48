@@ -38,12 +38,13 @@ function love.load()
 	for i = 1,5 do
 		enemies[i].image = love.graphics.newImage("enemy" .. i .. ".png")
 		enemies[i].picker = love.graphics.newImage("enemy" .. i .. "-picker.png")
-		enemies[i]:createEngine(pixel)
 	end
 	
 	background.image = love.graphics.newFramebuffer()
 	background.create()
 		
+	playerBulletList.image = love.graphics.newImage("player-bullet.png")	
+	enemyBulletList.image = love.graphics.newImage("enemy-bullet.png")
 		
 end
 
@@ -54,6 +55,10 @@ function love.draw()
 	background.draw()
 	
 	player.draw()
+	
+	playerBulletList:draw()
+	enemyBulletList:draw()
+	
 end
 
 function love.mousepressed(x, y, button)
@@ -73,6 +78,8 @@ function love.update(dt)
 	background.update(dt)
 	player.update(dt)
 	
+	playerBulletList:update(dt)
+	enemyBulletList:update(dt)
 	
 end
 	

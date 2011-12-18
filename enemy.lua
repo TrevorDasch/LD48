@@ -6,6 +6,8 @@ enemy.mt = {}
 
 function enemy:new(o)
 	setmetatable(o, self.mt)
+	
+	
 	return o
 end
 
