@@ -1,0 +1,9 @@
+Enemy1 = {amp, freq, offsetX, offsetY, posX, posY, health, cooldown}
+
+Enemy2 = {rot, posX, posY, health, cooldown}
+
+Enemy3 = {point:[],next, posX, posY, health, cooldown}
+
+Enemy4 = {aiming, fired, lookX, lookY, posX, posY, hhealthealth, cooldown, lastshot}
+
+Enemy5 = {rot, posX, posY, health, cooldown}

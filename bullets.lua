@@ -1,19 +1,20 @@
 detectionBuffer = love.graphics.newFramebuffer()
 
-enemyList = {}
 
 function hitEnemy(i,x,y)
 	local correct = nil
 	local mindist = 50
 	for key,val in pairs(enemyList[i]) do
-		local dist = math.sqrt((x+val.posX)*(x+val.posX)+(y+val.posY)*(y+val.posY))
+		local dist = math.sqrt((x-val.posX)*(x-val.posX)+(y-val.posY)*(y-val.posY))
 		if dist < mindist then
 			mindist = dist
 			correct = val
 		end
 	end
 	if correct then
-		correct.health= correct.health - 10
+		correct:damage(50)
+	else
+		--print("didn't hit?")
 	end
 	
 end
@@ -21,7 +22,7 @@ end
 
 function hitTarget(x,y,r,g,b,a, bullet)
 	if g == 0xFF then
-		player.health = player.health -10
+		player:damage(3)
 	end
 	
 	if r == 0xFF then
@@ -108,16 +109,20 @@ function bullet.prototype:update(dt)
 end
 
 function bullet.prototype:detect(rl,rh,gl,gh,bl,bh,al,ah)
+	
+	
+	
 	if self.destroyed then
 		return
 	end
+
 	for i= -2,2 do
 		local x = self.posX + math.cos(self.rot)*4*i
 		local y = self.posY + math.sin(self.rot)*4*i
 		
 		if x < 800 and x >= 0 and y < 600 and y >= 0 then
 		
-			local r,g,b,a = detectionBuffer:getImageData():getPixel(math.floor(x),math.floor(y))
+			local r,g,b,a = imageData:getPixel(math.floor(x),math.floor(y))
 			if r ~= nil and g ~= nil and b ~= nil and a ~= nil then
 				if rl <= r and r <= rh and gl <= g and g <= gh and bl <= b and b <= bh and al <= a and a <= ah then
 					hitTarget(x,y,r,g,b,a,self)
@@ -132,7 +137,7 @@ function bullet.prototype:draw(image)
 	if not self.destroyed then
 		love.graphics.draw(image,self.posX,self.posY,self.rot, 1, 1, 8, 8)
 	else
-		love.graphics.draw(explosion, 0,0)
+		love.graphics.draw(self.explosion, 0,0)
 	end
 end
 
@@ -185,6 +190,7 @@ end
 function BulletList.prototype:draw()
 	for key, val in pairs(self.bullets) do
 		val:draw(self.image)
+		--love.graphics.print( "bullet still exists", 100, 15*key)
 	end
 end
 
