@@ -4,6 +4,8 @@ require "enemies"
 gameLoaded = false
 score = 0;
 
+love.graphics.setFont(18)
+
 background = {}
 background.posX = 0
 background.posY = 0
@@ -183,8 +185,13 @@ function love.draw()
 	enemyList:draw()
 	player.draw()
 	
+	if player.health>0 then
+		love.graphics.print("SCORE: " .. score,10,10)
+		love.graphics.print("HEALTH: " .. player.health,10,40)
+	else
+		love.graphics.print("GAME OVER",200,250)
+	end
 	
-	love.graphics.
 	
 end
 

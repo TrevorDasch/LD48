@@ -169,7 +169,6 @@ function enemy4:update(dt)
 		if self.aiming and not self.fired then
 			self.lookX = player.posX
 			self.lookY = player.posY
-			self.aiming = false
 		end
 		
 		if self.fired then
@@ -181,7 +180,7 @@ function enemy4:update(dt)
 
 			self.posX = self.posX + math.sin(r) * 100 * dt
 			self.posY = self.posY - math.cos(r) * 100 * dt
-			if((self.posX-self.lookX)*(self.posX-self.lookX)+(self.posY-self.lookY)*(self.posY-self.lookY))<5 then
+			if((self.posX-self.lookX)*(self.posX-self.lookX)+(self.posY-self.lookY)*(self.posY-self.lookY))<90 then
 				self.aiming = true
 			end
 		end
@@ -192,6 +191,7 @@ function enemy4:update(dt)
 			self.lastshot = 0
 			enemyBulletList:addBullet(self.posX,self.posY,r-math.pi/2)
 			self.fired = true
+			self.aiming = false
 		end
 	end
 end

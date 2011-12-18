@@ -31,3 +31,6 @@ Wrote all the code for bullet creation, hit detection, and everything. Now I jus
 
 [Sat 11:24 PM]
 Created AI for all of my units, wrote in damage and everything. Almost done, just need a few bug fixes and maybe a health bar, a pause menu, a score, and a title screen
+
+[Sun 12:04 PM]
+The game is completely playable. I'm going to call it a night for LD48. Tomorrow is music and sound effect day, as well as my menus. Oh boy.
