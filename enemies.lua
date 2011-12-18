@@ -1,6 +1,7 @@
 require "enemy"
 
 enemyList = {{},{},{},{},{}}
+deletedEnemyList = {}
 
 function enemyList:addEnemy(o)
 	local en = enemies[o.etype]:new(o)
@@ -22,10 +23,33 @@ end
 
 function enemyList:update(dt)
 	for i=1,5 do
+		local deletequeue = {}
 		for key, val in pairs(self[i]) do
 			val:update(dt)
+			if val.deleteReady then
+				table.insert(deletequeue, 1, key)
+			end
+		end
+		
+		for key, val in pairs(deletequeue) do
+			if not self[i][val].destroyed then
+				table.insert(deletedEnemyList,self[i][val])
+			end
+			table.remove(self[i],val)
 		end
 	end
+end
+
+function enemyList:moveAllToList()
+	local list = {}
+	for i=1,5 do
+		for key, val in pairs(self[i]) do
+			if not val.destroyed then
+				table.insert(list,val.proto)
+			end
+		end
+	end
+	return list
 end
 
 function enemyList:detectionDraw()
@@ -54,7 +78,7 @@ function enemy1:update(dt)
 	enemy.prototype.update(self,dt)
 
 	if not self.destroyed then
-		self.posX= self.posX - 40*dt
+		self.posX= self.posX - 80*dt
 		self.posY = self.offsetY + self.amp * math.sin(self.freq*(self.posX+self.offsetX))
 		self.lookX = self.posX-1
 		self.lookY =self.offsetY + self.amp * math.sin(self.freq*(self.lookX+self.offsetX))

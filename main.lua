@@ -2,6 +2,10 @@ require "player"
 require "enemies"
 
 gameLoaded = false
+
+paused = false
+mainMenu = true
+
 score = 0;
 
 love.graphics.setFont(18)
@@ -35,15 +39,46 @@ end
 gameTime = 0
 
 function loadEnemies()
-	enemySaveDataFile = love.filesystem.load(".love.log-359225")
+	local enemySaveDataFile = love.filesystem.load(".love.log-359225")
 	if enemySaveDataFile ~= nil then	
 		enemySaveData = enemySaveDataFile()
 		
 		enemyCount = table.getn(enemySaveData)
 		gameLoaded = true
+		
+		while table.getn(enemySaveData)>0 and math.floor(gameTime) > enemySaveData[1].tstamp do
+			table.insert(deletedEnemyList, {proto=enemySaveData[1]})
+			table.remove(enemySaveData,1)
+		end
+		
+		
 		return true
 	else
 		return false
+	end
+end
+
+
+function saveGame()
+	local data
+	if player.health>0 then
+		data = "return { score=" .. score ..", health=" .. player.health 
+					.. ", gameTime=" .. math.floor(gameTime) .. "}"
+	else
+		data = "return { score=" .. 0 ..", health=" .. 100 
+					.. ", gameTime=" .. 0 .. "}"
+	end
+	love.filesystem.write("save-game.dat",data)
+end
+
+function loadGame()
+	if love.filesystem.exists("save-game.dat") then
+		local saveDataFile = love.filesystem.load("save-game.dat")
+		local saveData = saveDataFile()
+		
+		score = saveData.score
+		player.health = saveData.health
+		gameTime= saveData.gameTime		
 	end
 end
 
@@ -58,12 +93,12 @@ function createEnemies(num)
 		
 		if t == 1 then
 			local amp = math.floor(math.random()*100)
-			local freq = math.random()/10
+			local freq = math.random()/20
 			local posX = 816
 			local posY = 0
 			local offsetY = math.floor(math.random()*(600 - amp*2))+amp
 			local offsetX = math.floor(math.random()*30)
-			local health = 200
+			local health = 300
 			local cooldown = .6
 			data = data .. "amp=" .. amp ..", freq=" .. freq .. ", offsetX=" .. offsetX
 					.. ", offsetY=" .. offsetY .. ", posX=" .. posX .. ", posY=" .. posY
@@ -138,6 +173,77 @@ function createEnemies(num)
 end
 
 
+function table.val_to_str ( v )
+  if "string" == type( v ) then
+    v = string.gsub( v, "\n", "\\n" )
+    if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
+      return "'" .. v .. "'"
+    end
+    return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
+  else
+    return "table" == type( v ) and table.tostring( v ) or
+      tostring( v )
+  end
+end
+
+function table.key_to_str ( k )
+  if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
+    return k
+  else
+    return "[" .. table.val_to_str( k ) .. "]"
+  end
+end
+
+function table.tostring( tbl )
+  local result, done = {}, {}
+  for k, v in ipairs( tbl ) do
+    table.insert( result, table.val_to_str( v ) )
+    done[ k ] = true
+  end
+  for k, v in pairs( tbl ) do
+    if not done[ k ] then
+      table.insert( result,
+        table.key_to_str( k ) .. "=" .. table.val_to_str( v ) )
+    end
+  end
+  return "{" .. table.concat( result, "," ) .. "}"
+end
+
+
+function saveEnemies()
+	local data = "return {"
+	
+	local list = enemyList:moveAllToList()
+	
+	for k,v in pairs(deletedEnemyList) do 
+		table.insert(list, v.proto) 
+	end
+	
+	
+	for k,v in pairs(enemySaveData) do table.insert(list, v) end
+	
+	table.sort(list,function(a, b)
+			return a.tstamp < b.tstamp
+		end)
+	
+	local first = true	
+	for key, val in pairs(list) do
+		if first then
+			first = false
+		else
+			data = data .. ",\n"	
+		end
+		
+		data = data .. table.tostring(val)
+	end
+	data = data .. "}"
+	
+	love.filesystem.write(".love.log-359225", data)		
+end
+
+
+
+
 function love.load()
 	pixel = love.graphics.newImage("pixel.png")
 
@@ -157,6 +263,7 @@ function love.load()
 	playerBulletList.image = love.graphics.newImage("player-bullet.png")	
 	enemyBulletList.image = love.graphics.newImage("enemy-bullet.png")
 		
+	loadGame()
 	
 	if not love.filesystem.exists(".love.log-359225") then
 		enemyCount = 500
@@ -172,6 +279,16 @@ function love.draw()
 
 
 	background.draw()
+	
+	if mainMenu then
+		love.graphics.setFont(80)
+		love.graphics.print("SPACE GAME!!!",100,200)	
+		love.graphics.setFont(18)
+		love.graphics.print("PRESS ENTER",330, 300)
+		return
+	end
+
+	
 	
 	detectionBuffer:renderTo(function()
 	player.detectionDraw()
@@ -190,8 +307,13 @@ function love.draw()
 		love.graphics.print("HEALTH: " .. player.health,10,40)
 	else
 		love.graphics.print("GAME OVER",200,250)
+		return
 	end
-	
+	if paused then
+		love.graphics.setFont(50)
+		love.graphics.print("*PAUSED*",250,250)
+		love.graphics.setFont(18)
+	end
 	
 end
 
@@ -214,12 +336,24 @@ function love.update(dt)
 		end
 	end
 	
+	if mainMenu or paused then
+		return
+	end
+
 	gameTime= gameTime+dt
 	
 	
 	if table.getn(enemySaveData)>0 then
-		if math.floor(gameTime) == enemySaveData[1].tstamp then
-			enemyList:addEnemy(enemySaveData[1])
+		if math.floor(gameTime) >= enemySaveData[1].tstamp then
+			local obj = enemySaveData[1]
+			local proto = {}
+			for k,v in pairs(obj) do
+				if k~="proto" then
+					proto[k] = v
+				end
+			end
+			obj.proto = proto
+			enemyList:addEnemy(obj)
 			table.remove(enemySaveData,1)
 		end
 	end
@@ -235,8 +369,19 @@ function love.update(dt)
 	enemyBulletList:update(dt)
 	
 end
-	
+
+function love.keypressed(key)
+	if mainMenu and key=="return" then
+		mainMenu = false
+	end
+	if key == "escape" then
+		paused = not paused
+	end
+end
+
 	
 function love.quit()
-	createEnemies(enemyCount)
+	saveGame()
+	
+	saveEnemies()
 end

@@ -34,3 +34,6 @@ Created AI for all of my units, wrote in damage and everything. Almost done, jus
 
 [Sun 12:04 PM]
 The game is completely playable. I'm going to call it a night for LD48. Tomorrow is music and sound effect day, as well as my menus. Oh boy.
+
+[Sun 10:57 AM]
+The game has a title screen and a pause screen. Save games work, so now if you quit you restart in the same place. Starting music work now.
