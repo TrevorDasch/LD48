@@ -48,7 +48,8 @@ function loadEnemies()
 		gameLoaded = true
 		
 		while table.getn(enemySaveData)>0 and math.floor(gameTime) > enemySaveData[1].tstamp do
-			table.insert(deletedEnemyList, {proto=enemySaveData[1]})
+			table.insert(deletedEnemyList, enemySaveData[1])
+			enemySaveData[1] = nil
 			table.remove(enemySaveData,1)
 		end
 		
@@ -359,6 +360,7 @@ function love.update(dt)
 				end
 				obj.proto = proto
 				enemyList:addEnemy(obj)
+				enemySaveData[1] = nil
 				table.remove(enemySaveData,1)
 			end
 		else
