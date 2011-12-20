@@ -318,13 +318,10 @@ function love.draw()
 		titleScreen:draw()
 		return
 	end
-
-	
-	
-	detectionBuffer:renderTo(function()
 	player.detectionDraw()
 	enemyList:detectionDraw()
-	end)
+	
+	imageData = love.graphics.newScreenshot()
 	
 	playerBulletList:draw()
 	enemyBulletList:draw()
@@ -401,11 +398,12 @@ function love.update(dt)
 	player.update(dt)
 	enemyList:update(dt)
 	
+
+	playerBulletList:update(dt,imageData)
+	enemyBulletList:update(dt,imageData)
+
+	imageData = nil
 	
-	imageData = detectionBuffer:getImageData()
-	
-	playerBulletList:update(dt)
-	enemyBulletList:update(dt)
 	
 end
 

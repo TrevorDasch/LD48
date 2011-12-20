@@ -1,4 +1,3 @@
-detectionBuffer = love.graphics.newFramebuffer()
 
 
 function hitEnemy(i,x,y)
@@ -108,7 +107,7 @@ function bullet.prototype:update(dt)
 	end
 end
 
-function bullet.prototype:detect(rl,rh,gl,gh,bl,bh,al,ah)
+function bullet.prototype:detect(imageData,rl,rh,gl,gh,bl,bh,al,ah)
 	
 	
 	
@@ -164,11 +163,12 @@ BulletList.prototype.targetColorRange = {rl = 0, rh = 255, gl = 0, gh = 255, bl 
 BulletList.prototype.explosionColors = {r1 = 0xFF, g1 = 0xFF, b1 = 0xFF, a1 = 0xFF, r2 = 0xFF, g2 = 0xFF, b2 = 0xFF, a2 = 0x88}
 
 
-function BulletList.prototype:update(dt)
+function BulletList.prototype:update(dt, imageData)
 	local deletequeue = {}
 	for key, val in pairs(self.bullets) do
 	
-		val:detect(self.targetColorRange.rl,
+		val:detect(imageData, 
+				   self.targetColorRange.rl,
 				   self.targetColorRange.rh,
 				   self.targetColorRange.gl,
 				   self.targetColorRange.gh,
