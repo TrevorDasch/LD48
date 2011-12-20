@@ -217,7 +217,7 @@ function saveEnemies()
 	local list = enemyList:moveAllToList()
 	
 	for k,v in pairs(deletedEnemyList) do 
-		table.insert(list, v.proto) 
+		table.insert(list, v) 
 	end
 	
 	

@@ -64,7 +64,7 @@ function bullet.prototype:createExplosion(pixel)
     self.explosion:setEmissionRate          (500  )
     self.explosion:setLifetime              (.1)
     self.explosion:setParticleLife          (.2)
-    self.explosion:setOffset                (0, -20)
+    self.explosion:setOffset                (0, 0)
     self.explosion:setDirection             (math.pi /2)
     self.explosion:setSpread                (math.pi*2)
     self.explosion:setSpeed                 (400, 400)
@@ -183,6 +183,7 @@ function BulletList.prototype:update(dt)
 		end
 	end
 	for key, val in pairs(deletequeue) do
+		self.bullets[val] = nil
 		table.remove(self.bullets,val)
 	end
 end

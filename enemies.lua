@@ -33,8 +33,9 @@ function enemyList:update(dt)
 		
 		for key, val in pairs(deletequeue) do
 			if not self[i][val].destroyed then
-				table.insert(deletedEnemyList,self[i][val])
+				table.insert(deletedEnemyList,self[i][val].proto)
 			end
+			self[i][val] = nil
 			table.remove(self[i],val)
 		end
 	end
