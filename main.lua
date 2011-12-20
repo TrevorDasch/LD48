@@ -9,7 +9,7 @@ gameOver = false
 
 score = 0;
 
-love.graphics.setFont(18)
+
 
 background = {}
 background.posX = 0
@@ -36,6 +36,34 @@ function background.create()
 		end)
 	background.image:setWrap("repeat","repeat")
 end
+
+
+titleScreen = {}
+titleScreen.image = love.graphics.newFramebuffer()
+titleScreen.image:renderTo(
+	function()
+		love.graphics.setFont(80)
+		love.graphics.print("SPACE GAME!!!",100,200)	
+		love.graphics.setFont(18)
+		love.graphics.print("PRESS ENTER",330, 300)
+		return
+	end)
+function titleScreen:draw()
+	love.graphics.draw(self.image)
+end
+
+pauseScreen = {}
+pauseScreen.image = love.graphics.newFramebuffer()
+pauseScreen.image:renderTo(
+	function()
+		love.graphics.setFont(50)
+		love.graphics.print("*PAUSED*",250,250)
+	end)
+function pauseScreen:draw()
+	love.graphics.draw(self.image)
+end
+
+love.graphics.setFont(18)
 
 gameTime = 0
 
@@ -247,6 +275,7 @@ end
 
 
 function love.load()
+	
 	pixel = love.graphics.newImage("pixel.png")
 	music = love.audio.newSource("GameMusic01.ogg")
 	music:setLooping(true)
@@ -286,10 +315,7 @@ function love.draw()
 	background.draw()
 	
 	if mainMenu then
-		love.graphics.setFont(80)
-		love.graphics.print("SPACE GAME!!!",100,200)	
-		love.graphics.setFont(18)
-		love.graphics.print("PRESS ENTER",330, 300)
+		titleScreen:draw()
 		return
 	end
 
@@ -316,9 +342,7 @@ function love.draw()
 		return
 	end
 	if paused then
-		love.graphics.setFont(50)
-		love.graphics.print("*PAUSED*",250,250)
-		love.graphics.setFont(18)
+		pauseScreen:draw()
 	end
 	
 end
