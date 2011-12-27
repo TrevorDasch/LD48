@@ -403,7 +403,7 @@ function love.update(dt)
 	enemyBulletList:update(dt,imageData)
 
 	imageData = nil
-	
+	collectgarbage("collect")
 	
 end
 
